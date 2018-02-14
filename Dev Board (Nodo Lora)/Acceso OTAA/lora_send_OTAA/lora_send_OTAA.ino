@@ -1,35 +1,27 @@
 //Library and sketch by HomeNode.co
 //US915 subband 2
-
 #include "lora_us915sb2.h"
-
 LORA_US915SB2 loraModule(
               "00000000000000000000000000000001", //App. key
               10 //Power index from 5 to 10
 );
-
 #include <Wire.h>
 #include <SHT2x.h>
- 
 void setup()
 {
   Wire.begin();
   Serial.begin(9600);
-  analogReference(DEFAULT); 
-  loraModule.joinOTAA();
-
 }
  
 void loop()
 {
-  
+  analogReference(DEFAULT); 
+  loraModule.joinOTAA();
+  delay(4000);
   String tempvaluehex;
   String humvaluehex;
   String metvaluehex;
   String diovaluehex;
-  
- // loraModule.configRN(); //Run once, then you can comment this line out, if there is no changes in activation data.
- // delay(1000);
   
   while(1){
 
@@ -48,8 +40,6 @@ void loop()
   float temperatura = (SHT2x.GetTemperature());
   float humedad = (SHT2x.GetHumidity());
   //char data[20];
-  
-  //Condiciones sensor CO2
  
   Serial.println("-------------------------------------------");
 
@@ -66,19 +56,7 @@ void loop()
   Serial.print("Concentración de CO2:");
   Serial.print(condioxido);
   Serial.println("ppm");
-  //delay(5000);
-    //Imprime concentración de CO2 
-  //Serial.println("----------------------------------");
-   
- 
-  //ENVIO POR LORA
-  
-  
-  
-  //Serial.println(tempvaluehex);
-  //Serial.println(conmetano);
-  
-  //delay(2000);
+
   int newtemp = int(temperatura); 
   int newhum = int(humedad);
   int newmet = int(conmetano);
@@ -109,7 +87,6 @@ void loop()
   String datameth = "03";//+ metvaluehex;
   String datadiox = "04";//+ diovaluehex;
 
-  
   loraModule.sendDataHex(tempvaluehex); //Send HEX string
   loraModule.sendDataHex(datatemp);
   loraModule.sendDataHex(humvaluehex);
